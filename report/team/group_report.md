@@ -85,7 +85,7 @@ Giả định nhóm kiểm chứng trong buổi này: **Giả định #1 và #2*
 
 ### 3.2. Kiểm chứng
 
-Bản tổng hợp ghi chép hiện có: [Interview snapshots](../assets/cp4-interview-snapshots.md). Asset giữ nội dung từ báo cáo này; hiện mới có 1 snapshot chi tiết trên tổng 3 người được báo cáo, chưa có ngày/cách hỏi và hai snapshot còn lại.
+Bản tổng hợp ghi chép hiện có: [Interview snapshots](../assets/cp4-interview-snapshot-1.md). Hiện chỉ có snapshot chi tiết P01; báo cáo nêu tổng 3 người nhưng chưa có ghi chép riêng P02/P03 và ngày/cách hỏi.
 
 Cách đã dùng: Phỏng vấn nhanh theo phương pháp *The Mom Test* (hỏi về trải nghiệm thực tế đã xảy ra, không hỏi về ý tưởng tương lai).
 
@@ -122,19 +122,21 @@ Tổng hợp:
 
 ### 4.1. Quy trình hiện tại
 
-[Sơ đồ Mermaid và điểm chuyển giao](../assets/cp5-workflow-current.md).
+Sơ đồ hiện tại (đỏ: bước nghẽn 2–3; handoff: giảng viên → sinh viên → LMS):
 
-Sơ đồ hiện tại:
-
-```text
-HIỆN TẠI — khoảng 30 phút/lần nộp bài
-
-[1. Mở slide/Zalo/LMS tìm yêu cầu: 5']
-  → [2. Đọc & dò tay tên file/thư mục: 8']
-  → [3. Kiểm tra README & gõ lệnh test: 10'] ← BOTTLENECK (18' đối soát thủ công)
-  → [4. Đặt tên file ZIP theo cú pháp: 4']
-  → [5. Giải nén kiểm tra lại & nộp bài: 3']
+```mermaid
+flowchart TD
+ SRC[Giảng viên cung cấp yêu cầu qua slide, tin nhắn và LMS] --> A[1. Sinh viên tìm các yêu cầu - 5 phút]
+ A --> B[2. Đọc và dò tên file, thư mục - 8 phút]
+ B --> C[3. Kiểm tra README và chạy test - 10 phút]
+ C --> D[4. Đóng gói và đặt tên ZIP - 4 phút]
+ D --> E[5. Giải nén kiểm tra lại và nộp - 3 phút]
+ E --> LMS[LMS tiếp nhận bài cho giảng viên]
+ classDef bottleneck fill:#ffe0e0,stroke:#c62828,stroke-width:2px,color:#111
+ class B,C bottleneck
 ```
+
+Thời gian 5 + 8 + 10 + 4 + 3 = 30 phút theo bản nhóm, chưa có nhật ký bấm giờ. Bước 3 gồm chạy test code; phải tách thời gian này khi so với quy trình tương lai chỉ kiểm quy cách.
 
 | Bước | Actor | Input | Output | Thời gian / tần suất | Ghi chú |
 |---:|---|---|---|---|---|
@@ -148,21 +150,29 @@ HIỆN TẠI — khoảng 30 phút/lần nộp bài
 
 ### 4.2. Quy trình tương lai
 
-[Sơ đồ Mermaid có Rule, AI, HITL và fallback](../assets/cp5-workflow-future.md).
+Sơ đồ tương lai (xanh lá: con người; tím: AI; xanh dương: Rule; vàng: fallback; đỏ: boundary):
 
-Ghi rõ bước nào **Rule**, bước nào **AI**, bước nào **con người**, **boundary** ở đâu, **phương án quay về** khi AI sai.
-
-```text
-TƯƠNG LAI — khoảng 6 phút/lần nộp bài
-
-[1. Dán văn bản rubric vào tool: 1']
-  → [2. AI trích xuất JSON checklist các file bắt buộc: 30s]      ← AI (hỗ trợ đọc hiểu)
-  → [3. Sinh viên xem lại & xác nhận checklist: 1']               ← CON NGƯỜI (HITL)
-  → [4. Script tự động quét cây thư mục đối chiếu: 5s]             ← RULE / SCRIPT (tuyệt đối)
-  → [5. Sinh viên sửa các mục báo đỏ & nộp bài: 3']              ← CON NGƯỜI (Boundary: AI không tự sửa code)
-
-Phương án quay về: AI trích xuất sai hoặc không có mạng → Sinh viên tự tick chọn checklist mẫu bằng tay.
+```mermaid
+flowchart TD
+ A[1. Sinh viên nhập rubric và chọn thư mục - 1 phút]:::human --> B[2. AI trích checklist JSON kèm câu nguồn - 30 giây]:::ai
+ B --> C[3. Sinh viên đối chiếu với nguồn và xác nhận - 1 phút]:::human
+ C --> Q{Checklist đủ và đúng?}
+ Q -- Có --> D[4. Rule đọc cây thư mục và báo lỗi - 5 giây]:::rule
+ D --> E[5. Sinh viên sửa, duyệt và tự nộp - 3 phút]:::human
+ E --> LMS[LMS tiếp nhận bài]
+ Q -- Không --> F[Dùng checklist tay; hỏi lại yêu cầu không rõ]:::fallback
+ B -. Lỗi API hoặc mất mạng .-> F
+ D -. Quy tắc lỗi hoặc báo sai .-> F
+ F --> E
+ X[Boundary: không sửa, xóa, nén, commit, push hoặc nộp thay; không kết luận điểm số]:::boundary -.-> D
+ classDef human fill:#e8f5e9,stroke:#2e7d32,color:#111
+ classDef ai fill:#ede7f6,stroke:#6a1b9a,color:#111
+ classDef rule fill:#e3f2fd,stroke:#1565c0,color:#111
+ classDef fallback fill:#fff8e1,stroke:#f9a825,color:#111
+ classDef boundary fill:#ffebee,stroke:#c62828,color:#111
 ```
+
+Người học duyệt checklist ở bước 3 và tự duyệt trước khi nộp. Nếu AI trích sai, thiếu nguồn hoặc mất mạng, quay về checklist tay. Ngân sách 60 + 30 + 60 + 5 + 180 = 335 giây (khoảng 6 phút), chưa đo trong pilot.
 
 ### 4.3. Before / after
 

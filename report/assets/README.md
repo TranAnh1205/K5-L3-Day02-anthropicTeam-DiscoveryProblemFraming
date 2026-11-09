@@ -1,8 +1,8 @@
-# Assets của nhóm anthropicTeam
+# Assets
 
-- [CP4 — Interview snapshot P01](cp4-interview-snapshots.md): ghi chép hiện có và giới hạn của dữ liệu.
-- [CP5 — Quy trình hiện tại](cp5-workflow-current.md): sơ đồ Mermaid, handoff, thời gian và bottleneck.
-- [CP5 — Quy trình tương lai](cp5-workflow-future.md): AI, Rule, người duyệt và fallback.
-- [CP6 — Bộ 10 ca eval](cp6-eval-cases.md): tình huống và đầu ra mong đợi; chưa chạy thử.
+Đặt ảnh quy trình, ảnh chụp survey, interview snapshot và ghi chú research tại đây. Tên file phụ bắt đầu bằng số checkpoint.
 
-Thời gian trong quy trình hiện tại chưa có nhật ký bấm giờ; thời gian quy trình tương lai là ngân sách thiết kế, chưa phải kết quả đo.
+- [cp4-interview-snapshot-1.md](cp4-interview-snapshot-1.md): ghi chép chi tiết P01 từ báo cáo nhóm; P02/P03 chưa có snapshot riêng.
+- [cp6-eval-cases.md](cp6-eval-cases.md): 10 ca đầu vào và kết quả mong đợi; chưa chạy thử.
+
+Sơ đồ Mermaid của CP5 nằm trực tiếp trong [báo cáo nhóm](../team/group_report.md), mục 4.1 và 4.2, để GitHub hiển thị. Không đưa ảnh chứa tên, số điện thoại, email hoặc thông tin nội bộ chưa che vào thư mục này.
